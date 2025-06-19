@@ -35,4 +35,3 @@ def load_llm(model_name: str, torch_dtype=torch.bfloat16):
     )
 
     return text_pipeline
-

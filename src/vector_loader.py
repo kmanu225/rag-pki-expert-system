@@ -3,6 +3,7 @@ import chromadb
 from typing import List
 import os
 
+
 def load_and_split_texts(
     directory: str, chunk_size: int = 1000, chunk_overlap: int = 200
 ):
@@ -38,7 +39,6 @@ def load_and_split_texts(
                 passages.extend(text_splitter.split_text(text))
 
     return passages
-
 
 
 def store_passages_in_chromadb(

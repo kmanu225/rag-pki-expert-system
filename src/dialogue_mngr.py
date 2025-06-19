@@ -112,4 +112,3 @@ Context:
 
         assistant_reply = outputs[0]["generated_text"][len(formatted_prompt) :].strip()
         print(f"🤖 Assistant: {assistant_reply}\n")
-

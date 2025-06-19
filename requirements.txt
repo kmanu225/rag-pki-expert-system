@@ -1,7 +1,5 @@
 chromadb
 transformers
 torch
-bitsandbytes
-accelerate
 langchain
 gradio

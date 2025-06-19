@@ -39,3 +39,7 @@ Build a Public Key Infrastructure (PKI) expert system using a text-based knowled
 ├── main.py                    # Entry point of the application
 └── README.md                  # Project documentation
 ```
+
+## Architecture
+
+![alt text](architecture.png)
