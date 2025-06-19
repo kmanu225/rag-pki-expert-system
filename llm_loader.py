@@ -1,9 +1,10 @@
 from transformers import AutoTokenizer, pipeline
 import torch
 from huggingface_hub import login
+import os
 
 
-def load_llm(model_name: str, hf_token: str, torch_dtype=torch.bfloat16):
+def load_llm(model_name: str, torch_dtype=torch.bfloat16):
     """
     Loads a text-generation pipeline using a specified Hugging Face model and token.
 
@@ -16,7 +17,9 @@ def load_llm(model_name: str, hf_token: str, torch_dtype=torch.bfloat16):
         pipeline: A Hugging Face text-generation pipeline.
     """
     # Log in to Hugging Face
-    login(token=hf_token)
+    login(token=os.getenv("HF_TOKEN"))
+
+    # login(token=hf_token)
 
     # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name)
