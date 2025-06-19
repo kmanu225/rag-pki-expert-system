@@ -42,4 +42,4 @@ Build a Public Key Infrastructure (PKI) expert system using a text-based knowled
 
 ## Architecture
 
-![alt text](architecture.png)
+![alt text](architecture/architecture.png)
