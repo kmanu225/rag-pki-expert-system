@@ -1,18 +1,19 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline, BitsAndBytesConfig
-from huggingface_hub import login
+from transformers import AutoTokenizer, pipeline
 import torch
+from huggingface_hub import login
 
-def load_llm(model_name: str, hf_token: str, use_4bit=True):
+
+def load_llm(model_name: str, hf_token: str, torch_dtype=torch.bfloat16):
     """
-    Loads a quantized and device-optimized text-generation pipeline using Hugging Face Transformers.
+    Loads a text-generation pipeline using a specified Hugging Face model and token.
 
     Args:
-        model_name (str): The Hugging Face model ID (e.g., "google/gemma-2-2b-it").
+        model_name (str): The model identifier from Hugging Face (e.g., "google/gemma-2-2b-it").
         hf_token (str): Hugging Face access token.
-        use_4bit (bool): Whether to load the model in 4-bit precision using bitsandbytes.
+        torch_dtype: Desired PyTorch data type for the model (default: torch.bfloat16).
 
     Returns:
-        pipeline: Hugging Face text-generation pipeline.
+        pipeline: A Hugging Face text-generation pipeline.
     """
     # Log in to Hugging Face
     login(token=hf_token)
@@ -20,28 +21,15 @@ def load_llm(model_name: str, hf_token: str, use_4bit=True):
     # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-    # BitsAndBytes configuration for memory efficiency
-    quant_config = BitsAndBytesConfig(
-        load_in_4bit=use_4bit,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.float16,
-        bnb_4bit_use_double_quant=True,
-    ) if use_4bit else None
-
-    # Load model with appropriate quantization and device map
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map="auto",  # lets accelerate pick the best device(s)
-        torch_dtype=torch.float16 if use_4bit else torch.bfloat16,
-        quantization_config=quant_config,
-    )
-
-    # Build text-generation pipeline
+    # Load model and create pipeline
     text_pipeline = pipeline(
         "text-generation",
-        model=model,
+        model=model_name,
         tokenizer=tokenizer,
-        device_map="auto"
+        model_kwargs={
+            "torch_dtype": torch_dtype,
+        },
     )
 
     return text_pipeline
+

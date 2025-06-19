@@ -14,11 +14,9 @@ def launch_gradio_app():
         fn=gradio_interface,
         inputs=gr.Textbox(lines=2, placeholder="Ask a question...", label="Your Question"),
         outputs=gr.Textbox(label="Assistant Response"),
-        title="RAG Assistant",
+        title="PKI Expert",
         description="Ask any question, and the assistant will answer using retrieved context from the database.",
         theme="default",
         allow_flagging="never"
     )
     iface.launch()
-
-

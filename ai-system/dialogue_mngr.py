@@ -16,7 +16,7 @@ def query(
         str: The assistant's generated response.
     """
     # Prompt template
-    prompt_template = """You are a helpful and knowledgeable assistant. Please answer the user's question based on the context provided below.
+    prompt_template = """You are a helpful and knowledgeable assistant who is expert in cybersecurity. Please answer the user's question based on the context provided below.
 
 If the answer is not present in the context, respond with:
 "I could not find the answer based on the context you provided."
