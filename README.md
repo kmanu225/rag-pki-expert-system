@@ -20,7 +20,7 @@ Build a PKI expert system using text based knowledge for RAG context.
 ├── llm_loader.py               # LLM loading logic
 ├── embedder.py                 # Text chunking functions
 ├── vector_store.py             # ChromaDB integration
-├── dialog_manager.py           # Interactive assistant logic
+├── query.py           # Interactive assistant logic
 ├── app.py                      # Example entry point
 └── README.md
 ```

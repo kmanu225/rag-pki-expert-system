@@ -1,6 +1,7 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+import chromadb
+from typing import List
 import os
-
 
 def load_and_split_texts(
     directory: str, chunk_size: int = 1000, chunk_overlap: int = 200
@@ -37,3 +38,30 @@ def load_and_split_texts(
                 passages.extend(text_splitter.split_text(text))
 
     return passages
+
+
+
+def store_passages_in_chromadb(
+    passages: List[str], collection_name: str = "rag_cookbook_collection"
+):
+    """
+    Stores a list of text passages into a ChromaDB collection.
+
+    Args:
+        passages (List[str]): List of text chunks to store.
+        collection_name (str): Name of the ChromaDB collection.
+
+    Returns:
+        chromadb.Collection: The ChromaDB collection containing the passages.
+    """
+    if not passages:
+        raise ValueError("No passages to store.")
+
+    # Initialize ChromaDB client and collection
+    chroma_client = chromadb.Client()
+    collection = chroma_client.get_or_create_collection(name=collection_name)
+
+    # Add documents with unique string IDs
+    collection.add(documents=passages, ids=[str(i) for i in range(len(passages))])
+
+    return collection

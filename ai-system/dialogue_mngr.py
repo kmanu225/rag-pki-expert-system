@@ -1,5 +1,4 @@
-
-def dialog_manager(
+def query(
     user_question: str, collection, pipeline, top_k: int = 3, max_new_tokens: int = 256
 ):
     """

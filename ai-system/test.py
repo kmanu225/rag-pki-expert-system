@@ -1,7 +1,6 @@
 from llm_loader import load_llm
-from embedder import load_and_split_texts
-from vector_db import store_passages_in_chromadb
-from dialog_manager import dialog_manager
+from vector_loader import load_and_split_texts, store_passages_in_chromadb
+from dialogue_mngr import query
 
 
 if __name__ == "__main__":
@@ -22,5 +21,5 @@ if __name__ == "__main__":
     user_question = (
         "Generate a questionnaire for my job interview on PKI and certificate."
     )
-    response = dialog_manager(user_question, collection, llm_pipeline)
+    response = query(user_question, collection, llm_pipeline)
     print(response)
