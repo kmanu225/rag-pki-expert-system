@@ -1,0 +1,7 @@
+google_labs_html_chunker
+chromadb
+transformers
+torch
+bitsandbytes
+accelerate
+langchain
