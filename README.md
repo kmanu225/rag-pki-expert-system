@@ -11,16 +11,20 @@ Build a PKI expert system using text based knowledge for RAG context.
 - 💬 **Interactive Dialog Interface**: Terminal-based assistant that retrieves relevant context and generates informed answers.
 - 🛠️ **Modular Design**: Easily swap models, vector DBs, or prompt templates.
 
-# Architecture
+# Project Structure
 
 ```perl
 .
 │
-├── knowledge/                  # Folder with source documents (.txt)
-├── llm_loader.py               # LLM loading logic
-├── embedder.py                 # Text chunking functions
-├── vector_store.py             # ChromaDB integration
-├── query.py           # Interactive assistant logic
-├── app.py                      # Example entry point
-└── README.md
+├── knowledge/                 # Folder containing source documents (e.g., .txt files)
+├── llm_loader.py              # Logic for loading the language model (LLM)
+├── vector_loader.py           # Text chunking and ChromaDB integration
+├── test.py                    # Script or module for testing
+├── gr_gui.py                  # Gradio-based graphical user interface
+├── dialogue_mngr.py           # Functions for question-answer interaction
+├── query.py                   # Logic for handling interactive assistant queries
+├── rag.py                     # RAG (Retrieval-Augmented Generation) core implementation
+├── main.py                    # Entry point of the application
+└── README.md                  # Project documentation
+
 ```
