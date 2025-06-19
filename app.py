@@ -12,4 +12,3 @@ passages = load_and_split_texts(knowledge_folder)
 collection = store_passages_in_chromadb(passages)
 
 interactive_dialog(collection, llm_pipeline)
-
