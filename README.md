@@ -1,19 +1,31 @@
-# Goals
+# 🔐 PKI Expert System with RAG
 
-Build a PKI expert system using text based knowledge for RAG context.
+## Goals
+
+Build a Public Key Infrastructure (PKI) expert system using a text-based knowledge base and Retrieval-Augmented Generation (RAG) for context-aware responses.
 
 
-# Features
+## Features
 
-- 🔗 **Retrieval-Augmented Generation (RAG)**: Integrates vector search (via ChromaDB) with text generation (Transformers available on Hugging Face for free).
-- 🧠 **LLM Integration**: Utilizes models like `google/gemma-2-2b-it` for high-quality generation.
-- 🗂️ **Long-term Knowledge Handling**: Automatically chunks and indexes documents from a local folder.
-- 💬 **Interactive Dialog Interface**: Terminal-based assistant that retrieves relevant context and generates informed answers.
-- 🛠️ **Modular Design**: Easily swap models, vector DBs, or prompt templates.
+* **Retrieval-Augmented Generation (RAG)**
+  Combines vector search (via ChromaDB) with text generation (using free models from Hugging Face).
 
-# Project Structure
+* **LLM Integration**
+  Supports models like `google/gemma-2-2b-it` for high-quality response generation.
 
-```perl
+* **Automated Knowledge Processing**
+  Automatically chunks and indexes documents from the local `knowledge/` folder for efficient retrieval.
+
+* **Interactive Dialog Interface**
+  Provides a command-line and Gradio-based assistant that retrieves relevant context and generates informed answers.
+
+* **Modular Architecture**
+  Easily extend or replace components such as the LLM, vector database, or prompting logic.
+
+
+## Project Structure
+
+```text
 .
 │
 ├── knowledge/                 # Folder containing source documents (e.g., .txt files)
@@ -26,5 +38,4 @@ Build a PKI expert system using text based knowledge for RAG context.
 ├── rag.py                     # RAG (Retrieval-Augmented Generation) core implementation
 ├── main.py                    # Entry point of the application
 └── README.md                  # Project documentation
-
 ```
