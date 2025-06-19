@@ -1,0 +1,117 @@
+Digital Certificates
+If you've ever clicked on the little lock icon in the corner of your web browser, usually to the left of the address bar, you may have come across something labeled "Certificate." Perhaps you were just exploring out of curiosity, or maybe you were trying to understand if a website was secure. If you didn’t go further or still don’t know what that certificate actually is, don’t worry. In this article, we’ll take a step-by-step look at what a digital certificate really is, and why it's such an important part of secure communications online. Depending on what you're trying to achieve, a certificate might be essential or not required at all.
+
+To begin with, let’s use a real-world analogy to make things easier to grasp. Imagine Emmanuella, a citizen of a fictional country called Cryptoland, wants to obtain a passport. Before she even starts the process, she takes some time to understand why she needs one. A passport, she learns, allows her to travel internationally, prove her identity abroad, and access services in foreign countries that require official identification. In other words, it serves as a trusted document that confirms who she is.
+
+
+e-Passport
+Once she understands its purpose, Emmanuella begins the process of applying. She collects all the necessary documents and submits her application to a local office responsible for handling such requests. Let’s call this office the registrar. In Cryptoland, maybe this first step can even be done online. After receiving the application, the registrar forwards it to a local authority, which might ask Emmanuella to show up in person with original documents to verify her identity.
+
+Once this verification is complete, the local authority compiles a dossier and sends it to the national authority, the top-level body in charge of officially issuing passports. The national authority reviews the application, performs further checks if necessary, and decides whether to approve it. If everything is in order, the decision travels back down the chain to the local authority, which then notifies Emmanuella and gives her the passport.
+
+Now Emmanuella is ready. With her passport in hand, she can travel, prove who she is, and do all the things that require an official identity.
+
+The process of getting a digital certificate in an information system follows a similar logic. A certificate acts as a form of identity in the digital world. It’s a way for a server, user, or device to say, “This is who I am and here’s a trusted third party that can confirm it.” That trusted third party is known as a Certificate Authority (CA). Much like the national authority in Cryptoland, the CA is responsible for verifying the identity of the requester and issuing the certificate.
+
+So if you remember one thing, let it be this: a digital certificate in the digital world serves the same purpose as a passport in the physical world. It identifies its holder and helps others decide whether to trust it.
+
+Now that we’ve walked through the analogy, let’s move on to the actual technical definition and structure of a digital certificate.
+
+What is a Digital Certificate?
+A digital certificate is an electronic document that contains various pieces of information about an object or entity within an information system. Much like a passport identifies a person in the physical world, a digital certificate identifies a system component such as a server, user, or device in the digital world. It is issued and signed by a trusted authority, and its authenticity can be verified cryptographically.
+
+A digital certificate serves two main purposes:
+
+Identification: It confirms the identity of an entity in a critical or sensitive environment, enabling secure communication and authentication.
+
+Key Association: It binds an identity to a cryptographic key, which can be used for:
+
+Confidentiality, when data needs to be encrypted.
+
+Integrity, when data or messages need to be signed and verified.
+
+
+1Kosmos
+Digital certificates are used across many systems and technologies, especially where secure communication or authentication is required.
+
+For example, in web browsing, websites use digital certificates to prove their legitimacy to visitors. When you access a website over HTTPS, your browser checks the website’s certificate to ensure it was issued by a trusted authority and that the website is indeed who it claims to be.
+
+In corporate environments, certificates are used to authenticate users, devices, and internal services. Mobile device management (MDM) platforms, for instance, use certificates to control which devices can access enterprise resources.
+
+Certificates also play a key role in email encryption, code signing, VPN access, IoT device provisioning, and many other security-sensitive use cases.
+
+What is the Content of a Digital Certificate ?
+A digital certificate usually follows the X.509 standard, which defines the format and structure of public key certificates. These certificates are used across the internet and in enterprise systems to establish trust between communicating parties. A typical X.509 certificate contains several key fields:
+
+Subject: This identifies the entity (such as a person, server, or device) that the certificate was issued to.
+
+Issuer: The trusted Certificate Authority (CA) that issued and signed the certificate.
+
+Public Key: The cryptographic public key associated with the subject. It is used for encryption or verifying digital signatures.
+
+Validity Period: A start and end date defining the window during which the certificate is considered valid.
+
+Serial Number: A unique identifier assigned by the CA to distinguish this certificate from others it has issued.
+
+Signature Algorithm: The cryptographic algorithm used by the CA to sign the certificate.
+
+Digital Signature: The CA’s signature, which proves that the certificate was indeed issued by a trusted authority and has not been altered.
+
+
+GlobalSign Root certificate
+In addition to these standard fields, certificates often include extensions that add optional information or impose constraints on how the certificate can be used. These extensions can define:
+
+Key usage policies (e.g., for signing, encryption, or certificate signing),
+
+Subject Alternative Names (SANs) (e.g., domain names, IP addresses),
+
+Certificate revocation information, such as pointers to a Certificate Revocation List (CRL) or Online Certificate Status Protocol (OCSP) responders.
+
+Digital certificates and their associated private keys are typically stored in secured containers known as keystores. The format and type of keystore used depend on the system or application. For example, PEM files (.pem) which are base64 encoded are common in Unix-based systems and often used in web servers.
+
+
+PEM format
+Java-based applications typically rely on JKS (Java KeyStore) files.
+When certificates and private keys need to be bundled together in a single, password-protected file, PKCS#12 (.p12 or .pfx) is a common format. Certificates can also be stored in DER (Distinguished Encoding Rules) format, a binary encoding used by some systems that require strict encoding rules.
+
+If you're comfortable using the command line, you can use the OpenSSL toolkit to generate and inspect certificates. Here's a simple example:
+
+Copy
+# Generate a private key using the Ed25519 algorithm
+openssl genpkey -algorithm ED25519 -out key.pem
+
+# (Optional) List all available public key algorithms supported by OpenSSL
+openssl list -public-key-algorithms
+
+# Create a self-signed certificate valid for 365 days
+openssl req -new -x509 -key key.pem -out cert.pem -days 365
+
+# Display the content of the certificate in a human-readable format
+openssl x509 -text -noout -in cert.pem
+
+# Convert the certificate from PEM format to DER format
+openssl x509 -in cert.pem -out cert.der -outform DER
+These steps allow you to create a working certificate pair and inspect its contents. This is a great way to deepen your understanding of how certificates are built and structured.
+
+Where are Digital Certificates Stored?
+The storage location of digital certificates depends on the system and the type of certificate involved. On user devices, certificates are typically stored in the operating system’s certificate store.
+For instance, on Windows, you can access and manage certificates using the Certificate Manager (certmgr.msc).
+
+
+Certificates store on Windows
+On Unix systems it is stored in /etc/ssl/certs/.
+
+Copy
+ls -al /etc/ssl/certs/
+On macOS and iOS, certificates are handled through Keychain Access, while Android devices manage them under the Trusted Credentials section in the system's security settings.
+
+How to Get a Digital Certificate?
+Obtaining a digital certificate typically involves a process known as certificate enrollment. It is works like Emmanuella passport issuance. Here’s a simplified overview:
+
+First, the entity (user, server, device) generates a key pair : a public and private key. The public key, along with identifying information (e.g., domain name, email address), is included in a Certificate Signing Request (CSR).
+
+This CSR is submitted to a Certificate Authority (CA), which verifies the identity of the requester. Depending on the certificate type (e.g., DV, OV, EV for web certificates), this verification may be minimal or extensive.
+
+If the verification is successful, the CA signs the certificate with its private key and returns it to the requester. This signed certificate can then be used in the requester’s system to enable secure communications.
+
+Generally certificate which are present in the lock which appears on your web browser has been issued by some popular Certificate Authorities (CAs) you can see in the table below.
