@@ -68,16 +68,16 @@ def interactive_dialog(collection, pipeline, top_k: int = 3, max_new_tokens: int
 
     prompt_template = """You are a helpful and knowledgeable assistant. Please answer the user's question based on the context provided below.
 
-If the answer is not present in the context, respond with:
-"I could not find the answer based on the context you provided."
+    If the answer is not present in the context, respond with:
+    "I could not find the answer based on the context you provided."
 
-Answer in a clear, concise, and informative manner.
+    Answer in a clear, concise, and informative manner.
 
-User Question:
-{}
+    User Question:
+    {}
 
-Context:
-{}
+    Context:
+    {}
 """
 
     print("💬 Interactive RAG Assistant — Ask me anything (type 'exit' to quit)\n")
