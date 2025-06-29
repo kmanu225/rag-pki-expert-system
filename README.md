@@ -11,7 +11,7 @@ Build a Public Key Infrastructure (PKI) expert system using a text-based knowled
   Combines vector search (via ChromaDB) with text generation (using free models from Hugging Face).
 
 * **LLM Integration**
-  Supports models like `google/gemma-2-2b-it` for high-quality response generation.
+  Supports models like for high-quality response generation.
 
 * **Automated Knowledge Processing**
   Automatically chunks and indexes documents from the local `knowledge/` folder for efficient retrieval.
