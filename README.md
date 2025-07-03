@@ -45,3 +45,10 @@ Build a Public Key Infrastructure (PKI) expert system using a text-based knowled
 ## Architecture
 
 ![alt text](docs/architecture.png)
+
+
+## Prerequesites
+
+- Python 3.10.12+
+- openrouter api key
+- huggingface api key
