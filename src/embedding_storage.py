@@ -41,7 +41,7 @@ def load_and_split_texts(
     return passages
 
 
-def store_passages_in_chromadb(
+def chromadb_storage(
     passages: List[str], collection_name: str = "rag_cookbook_collection"
 ):
     """

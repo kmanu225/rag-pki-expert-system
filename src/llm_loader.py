@@ -4,7 +4,7 @@ from huggingface_hub import login
 import os
 
 
-def load_llm(model_name: str, torch_dtype=torch.bfloat16):
+def hg_face(model_name: str, torch_dtype=torch.bfloat16):
     """
     Loads a text-generation pipeline using a specified Hugging Face model and token.
 
@@ -18,8 +18,6 @@ def load_llm(model_name: str, torch_dtype=torch.bfloat16):
     """
     # Log in to Hugging Face
     login(token=os.getenv("HF_TOKEN"))
-
-    # login(token=hf_token)
 
     # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name)
