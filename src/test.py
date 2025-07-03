@@ -12,7 +12,7 @@ if __name__ == "__main__":
     print(query_openrouter_llm(user_question, None))
     print(f"OpenRouter LLM response time: {time() - start_time:.2f} seconds")
 
-    print("Querying local Hugging Face LLM...")
-    start_time = time()
-    print(query_local_hgf_llm(user_question, None))
-    print(f"Local Hugging Face LLM response time: {time() - start_time:.2f} seconds")
+    # print("Querying local Hugging Face LLM...")
+    # start_time = time()
+    # print(query_local_hgf_llm(user_question, None))
+    # print(f"Local Hugging Face LLM response time: {time() - start_time:.2f} seconds")

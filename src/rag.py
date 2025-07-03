@@ -2,6 +2,7 @@ from llm_pipeline import hgf_llm
 from embedding_storage import get_chromadb_collection
 import requests
 import json
+import os
 
 # Usage example:
 # pipeline = OpenRouterPipeline("openai/gpt-4o", api_key="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")
@@ -51,7 +52,7 @@ def hgf_generator(user_question, context, max_new_tokens: int = 256):
     {}"""
 
     pipeline = hgf_llm(model_name=HGF_MODEL)
-    
+
     prompt = prompt_template.format(user_question, context)
     messages = [{"role": "user", "content": prompt}]
     formatted_prompt = pipeline.tokenizer.apply_chat_template(
@@ -87,10 +88,12 @@ def openrouter_generator(user_question, context):
     {}"""
 
     prompt = prompt_template.format(user_question, context)
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    print(f"Using OpenRouter API key: {api_key}")
     response = requests.post(
         url="https://openrouter.ai/api/v1/chat/completions",
         headers={
-            "Authorization": "Bearer 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",
+            "Authorization": "Bearer " + api_key,
         },
         data=json.dumps(
             {
@@ -99,5 +102,5 @@ def openrouter_generator(user_question, context):
             }
         ),
     )
-
+    print(response.status_code, response.reason)
     return response.json()["choices"][0]["message"]["content"].strip()

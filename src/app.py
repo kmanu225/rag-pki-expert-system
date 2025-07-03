@@ -37,7 +37,7 @@ def query_openrouter_llm(user_question: str, history):
     Returns:
         str: The generated response from the assistant.
     """
-    print(f"Retrieving context for question: {user_question}")
+    # print(f"Retrieving context for question: {user_question}")
 
     context = context_retrieval(user_question)
     
@@ -54,6 +54,7 @@ def launch_hgf_gradio_app_history():
         theme="default",
         save_history=True,
     ).launch()
+
 
 def launch_openrouter_gradio_app_history():
     gr.ChatInterface(
