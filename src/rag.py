@@ -1,16 +1,18 @@
 from llm_pipeline import hgf_llm
-from embedding_storage import get_chromadb_collection
+from embedding_storage import get_contextual_knowledge
 import requests
 import json
 import os
 
-# Usage example:
-# pipeline = OpenRouterPipeline("openai/gpt-4o", api_key="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")
-# result = pipeline("What is the meaning of life?")
-# print(result)
 
-HGF_MODEL = "google/gemma-2b-it"
-collection = get_chromadb_collection()
+collection = get_contextual_knowledge()
+prompt_template = """You are a helpful and knowledgeable assistant who is expert in cybersecurity. Please answer the user's question based on the context provided below. Answer in a clear, concise, and informative manner. If the answer is not present in the context, respond with: "I could not find the answer based on the context you provided."
+    
+User Question:
+{}
+    
+Context:
+{}"""
 
 
 def context_retrieval(user_question: str, top_k: int = 3):
@@ -43,14 +45,8 @@ def hgf_generator(user_question, context, max_new_tokens: int = 256):
     Returns:
         str: The assistant's generated response, or a fallback message if the answer is not in the context.
     """
-    prompt_template = """You are a helpful and knowledgeable assistant who is expert in cybersecurity. Please answer the user's question based on the context provided below. Answer in a clear, concise, and informative manner. If the answer is not present in the context, respond with: "I could not find the answer based on the context you provided."
-    
-    User Question:
-    {}
-    
-    Context:
-    {}"""
 
+    HGF_MODEL = "google/gemma-2b-it"
     pipeline = hgf_llm(model_name=HGF_MODEL)
 
     prompt = prompt_template.format(user_question, context)
@@ -79,17 +75,9 @@ def openrouter_generator(user_question, context):
     Returns:
         str: The assistant's generated response.
     """
-    prompt_template = """You are a helpful and knowledgeable assistant who is expert in cybersecurity. Please answer the user's question based on the context provided below. Answer in a clear, concise, and informative manner. If the answer is not present in the context, respond with: "I could not find the answer based on the context you provided."
-    
-    User Question:
-    {}
-    
-    Context:
-    {}"""
 
     prompt = prompt_template.format(user_question, context)
     api_key = os.getenv("OPENROUTER_API_KEY")
-    print(f"Using OpenRouter API key: {api_key}")
     response = requests.post(
         url="https://openrouter.ai/api/v1/chat/completions",
         headers={
@@ -102,5 +90,8 @@ def openrouter_generator(user_question, context):
             }
         ),
     )
-    print(response.status_code, response.reason)
+    if response.status_code != 200:
+        raise Exception(
+            f"OpenRouter API request failed: {response.status_code} {response.reason}"
+        )
     return response.json()["choices"][0]["message"]["content"].strip()

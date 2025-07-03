@@ -44,7 +44,7 @@ def load_and_split_texts(
     return passages
 
 
-def chromadb_storage(
+def create_contextual_knowledge(
     passages: List[str],
     collection_name: str = "knwoledge_base_collection",
     persist_directory: str = CHROMA_DB_PATH,
@@ -71,8 +71,7 @@ def chromadb_storage(
     collection.add(documents=passages, ids=[str(i) for i in range(len(passages))])
 
 
-
-def get_chromadb_collection(
+def get_contextual_knowledge(
     collection_name: str = "knwoledge_base_collection",
     persist_directory: str = CHROMA_DB_PATH,
 ):
@@ -99,9 +98,9 @@ def get_chromadb_collection(
 if __name__ == "__main__":
     knowledge_base = "src/knowledge"
     passages = load_and_split_texts(knowledge_base)
-    chromadb_storage(passages)
-    
-    # collection = get_chromadb_collection()
+    create_contextual_knowledge(passages)
+
+    # collection = get_contextual_knowledge()
 
     # # print(f"Stored {len(passages)} passages in the collection '{collection.name}'.")
     # print(f"Collection metadata: {collection.name}, {collection.count()} documents.")

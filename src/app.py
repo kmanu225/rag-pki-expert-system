@@ -19,7 +19,7 @@ def query_local_hgf_llm(user_question: str, history):
     # print(f"Retrieving context for question: {user_question}")
 
     context = context_retrieval(user_question)
-    
+
     return hgf_generator(user_question, context)
 
 
@@ -40,7 +40,7 @@ def query_openrouter_llm(user_question: str, history):
     # print(f"Retrieving context for question: {user_question}")
 
     context = context_retrieval(user_question)
-    
+
     return openrouter_generator(user_question, context)
 
 
@@ -67,9 +67,10 @@ def launch_openrouter_gradio_app_history():
         save_history=True,
     ).launch()
 
+
 if __name__ == "__main__":
     # Launch the Gradio app for local Hugging Face LLM
     # launch_hgf_gradio_app_history()
-    
+
     # Launch the Gradio app for openrouter LLM
     launch_openrouter_gradio_app_history()
