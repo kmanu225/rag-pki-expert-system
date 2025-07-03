@@ -4,6 +4,9 @@ from typing import List
 import os
 
 
+CHROMA_DB_PATH = "db/chroma_db"
+
+
 def load_and_split_texts(
     directory: str, chunk_size: int = 1000, chunk_overlap: int = 200
 ):
@@ -41,15 +44,44 @@ def load_and_split_texts(
     return passages
 
 
+# def chromadb_storage(
+#     passages: List[str], collection_name: str = "rag_cookbook_collection"
+# ):
+#     """
+#     Stores a list of text passages into a ChromaDB collection.
+
+#     Args:
+#         passages (List[str]): List of text chunks to store.
+#         collection_name (str): Name of the ChromaDB collection.
+
+#     Returns:
+#         chromadb.Collection: The ChromaDB collection containing the passages.
+#     """
+#     if not passages:
+#         raise ValueError("No passages to store.")
+
+#     # Initialize ChromaDB client and collection
+#     chroma_client = chromadb.Client()
+#     collection = chroma_client.get_or_create_collection(name=collection_name)
+
+#     # Add documents with unique string IDs
+#     collection.add(documents=passages, ids=[str(i) for i in range(len(passages))])
+
+#     return collection
+
+
 def chromadb_storage(
-    passages: List[str], collection_name: str = "rag_cookbook_collection"
+    passages: List[str],
+    collection_name: str = "knwoledge_base_collection",
+    persist_directory: str = CHROMA_DB_PATH,
 ):
     """
-    Stores a list of text passages into a ChromaDB collection.
+    Stores a list of text passages into a persistent ChromaDB collection.
 
     Args:
         passages (List[str]): List of text chunks to store.
         collection_name (str): Name of the ChromaDB collection.
+        persist_directory (str): Directory where the ChromaDB database will be stored.
 
     Returns:
         chromadb.Collection: The ChromaDB collection containing the passages.
@@ -57,11 +89,45 @@ def chromadb_storage(
     if not passages:
         raise ValueError("No passages to store.")
 
-    # Initialize ChromaDB client and collection
-    chroma_client = chromadb.Client()
+    # Initialize ChromaDB client with persistence
+    chroma_client = chromadb.PersistentClient(path=persist_directory)
     collection = chroma_client.get_or_create_collection(name=collection_name)
 
     # Add documents with unique string IDs
     collection.add(documents=passages, ids=[str(i) for i in range(len(passages))])
 
+
+
+def get_chromadb_collection(
+    collection_name: str = "knwoledge_base_collection",
+    persist_directory: str = CHROMA_DB_PATH,
+):
+    """
+    Retrieves an existing persistent ChromaDB collection.
+
+    Args:
+        collection_name (str): Name of the ChromaDB collection.
+        persist_directory (str): Directory where the ChromaDB database is stored.
+
+    Returns:
+        chromadb.Collection: The ChromaDB collection.
+    """
+    chroma_client = chromadb.PersistentClient(path=persist_directory)
+    try:
+        collection = chroma_client.get_collection(name=collection_name)
+    except Exception as e:
+        raise ValueError(
+            f"Collection '{collection_name}' not found in {persist_directory}: {e}"
+        )
     return collection
+
+
+if __name__ == "__main__":
+    knowledge_base = "src/knowledge"
+    passages = load_and_split_texts(knowledge_base)
+    chromadb_storage(passages)
+    
+    # collection = get_chromadb_collection()
+
+    # # print(f"Stored {len(passages)} passages in the collection '{collection.name}'.")
+    # print(f"Collection metadata: {collection.name}, {collection.count()} documents.")
