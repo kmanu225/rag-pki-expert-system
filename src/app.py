@@ -1,6 +1,8 @@
 import gradio as gr
 from rag import context_retrieval, hgf_generator, openrouter_generator
 import time
+import os
+import shutil
 
 
 def query_local_hgf_llm(user_question: str, history):
@@ -60,9 +62,30 @@ def print_like_dislike(x: gr.LikeData):
     print(x.index, x.value, x.liked)
 
 
+UPLOAD_DIR = "./uploads"
+
+
+def save_uploaded_file(temp_path):
+    """Save a temporary uploaded file to a permanent location and return the new path."""
+    if not os.path.exists(UPLOAD_DIR):
+        os.makedirs(UPLOAD_DIR)
+    filename = os.path.basename(temp_path)
+    dest_path = os.path.join(UPLOAD_DIR, filename)
+    # Avoid overwriting files with the same name
+    base, ext = os.path.splitext(filename)
+    counter = 1
+    while os.path.exists(dest_path):
+        dest_path = os.path.join(UPLOAD_DIR, f"{base}_{counter}{ext}")
+        counter += 1
+    shutil.copy(temp_path, dest_path)
+    return dest_path
+
+
 def add_message(history, message):
-    for x in message["files"]:
-        history.append({"role": "user", "content": {"path": x}})
+    # Save each uploaded file and update the path in the message
+    for temp_path in message["files"]:
+        saved_path = save_uploaded_file(temp_path)
+        history.append({"role": "user", "content": {"path": saved_path}})
     if message["text"] is not None:
         history.append({"role": "user", "content": message["text"]})
     return history, gr.MultimodalTextbox(value=None, interactive=False)
@@ -91,4 +114,4 @@ def interactive_smart_assistant(fn=query_openrouter_llm):
 
 
 if __name__ == "__main__":
-    interactive_smart_assistant(fn=query_openrouter_llm) # or fn=query_local_hgf_llm
+    interactive_smart_assistant(fn=query_openrouter_llm)  # or fn=query_local_hgf_llm

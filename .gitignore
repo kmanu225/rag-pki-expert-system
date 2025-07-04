@@ -196,3 +196,6 @@ cython_debug/
 
 # Token files
 tokens.sh
+
+# Temporary files
+*/uploads/
