@@ -44,7 +44,7 @@ def load_and_split_texts(
     return passages
 
 
-def create_contextual_knowledge(
+def create_local_contextual_knowledge(
     passages: List[str],
     collection_name: str = "knwoledge_base_collection",
     persist_directory: str = CHROMA_DB_PATH,
@@ -71,7 +71,7 @@ def create_contextual_knowledge(
     collection.add(documents=passages, ids=[str(i) for i in range(len(passages))])
 
 
-def get_contextual_knowledge(
+def get_local_contextual_knowledge(
     collection_name: str = "knwoledge_base_collection",
     persist_directory: str = CHROMA_DB_PATH,
 ):
@@ -95,12 +95,74 @@ def get_contextual_knowledge(
     return collection
 
 
+def create_remote_contextual_knowledge(
+    passages: List[str],
+    collection_name: str = "knwoledge_base_collection",
+    host: str = "localhost",
+    port: int = 8000,
+):
+    """
+    Stores a list of text passages into a persistent ChromaDB collection.
+
+    Args:
+        passages (List[str]): List of text chunks to store.
+        collection_name (str): Name of the ChromaDB collection.
+        persist_directory (str): Directory where the ChromaDB database will be stored.
+
+    Returns:
+        chromadb.Collection: The ChromaDB collection containing the passages.
+    """
+    if not passages:
+        raise ValueError("No passages to store.")
+
+    # Initialize ChromaDB client with persistence
+    print(f"Connecting to ChromaDB at {host}:{port}...")
+    chroma_client = chromadb.HttpClient(host, port)
+    
+    print(f"Creating or getting collection '{collection_name}'...")
+    collection = chroma_client.get_or_create_collection(name=collection_name)
+
+    # Add documents with unique string IDs
+    collection.add(documents=passages, ids=[str(i) for i in range(len(passages))])
+
+
+
+def get_remote_contextual_knowledge(
+    collection_name: str = "knwoledge_base_collection",
+    host: str = "localhost",
+    port: int = 8000,
+):
+    """
+    Retrieves an existing persistent ChromaDB collection.
+
+    Args:
+        collection_name (str): Name of the ChromaDB collection.
+        persist_directory (str): Directory where the ChromaDB database is stored.
+
+    Returns:
+        chromadb.Collection: The ChromaDB collection.
+    """
+    chroma_client = chromadb.HttpClient(host, port)
+    try:
+        collection = chroma_client.get_collection(name=collection_name)
+    except Exception as e:
+        raise ValueError(
+            f"Collection '{collection_name}' not found on {host}:{port}: {e}"
+        )
+    return collection
+
+
+
 if __name__ == "__main__":
     knowledge_base = "src/knowledge"
     passages = load_and_split_texts(knowledge_base)
-    create_contextual_knowledge(passages)
-
-    # collection = get_contextual_knowledge()
-
-    # # print(f"Stored {len(passages)} passages in the collection '{collection.name}'.")
+    
+    # Local storage 
+    # create_local_contextual_knowledge(passages)
+    # collection = get_local_contextual_knowledge()
     # print(f"Collection metadata: {collection.name}, {collection.count()} documents.")
+    
+    # Remote storage
+    create_remote_contextual_knowledge(passages)
+    remote_collection = get_remote_contextual_knowledge()
+    print(f"Remote collection metadata: {remote_collection.name}, {remote_collection.count()} documents.")

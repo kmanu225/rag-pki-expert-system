@@ -1,11 +1,12 @@
-from llm_pipeline import hgf_llm
-from embedding_storage import get_contextual_knowledge
+from embedding_storage import get_remote_contextual_knowledge
+from transformers import AutoTokenizer, pipeline
+from huggingface_hub import login
 import requests
+import torch
 import json
 import os
 
-
-collection = get_contextual_knowledge()
+collection = get_remote_contextual_knowledge()
 prompt_template = """You are a helpful and knowledgeable assistant who is expert in cybersecurity. Please answer the user's question based on the context provided below. Answer in a clear, concise, and informative manner. If the answer is not present in the context, respond with: "I could not find the answer based on the context you provided."
     
 User Question:
@@ -33,6 +34,37 @@ def context_retrieval(user_question: str, top_k: int = 3):
     return context
 
 
+def hgf_llm(model_name: str, torch_dtype=torch.bfloat16):
+    """
+    Loads a text-generation pipeline using a specified Hugging Face model and token.
+
+    Args:
+        model_name (str): The model identifier from Hugging Face (e.g., "google/gemma-2-2b-it").
+        hf_token (str): Hugging Face access token.
+        torch_dtype: Desired PyTorch data type for the model (default: torch.bfloat16).
+
+    Returns:
+        pipeline: A Hugging Face text-generation pipeline.
+    """
+    # Log in to Hugging Face
+    login(token=os.getenv("HF_TOKEN"))
+
+    # Load tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    # Load model and create pipeline
+    text_pipeline = pipeline(
+        "text-generation",
+        model=model_name,
+        tokenizer=tokenizer,
+        model_kwargs={
+            "torch_dtype": torch_dtype,
+        },
+    )
+
+    return text_pipeline
+
+
 def hgf_generator(user_question, context, max_new_tokens: int = 256):
     """
     Generates a response to the user's question based on the provided context using a text-generation pipeline.
@@ -54,7 +86,6 @@ def hgf_generator(user_question, context, max_new_tokens: int = 256):
     formatted_prompt = pipeline.tokenizer.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True
     )
-    # print(f"Formatted prompt: {formatted_prompt}")
 
     outputs = pipeline(
         formatted_prompt, max_new_tokens=max_new_tokens, do_sample=True, temperature=0.1
@@ -95,3 +126,5 @@ def openrouter_generator(user_question, context):
             f"OpenRouter API request failed: {response.status_code} {response.reason}"
         )
     return response.json()["choices"][0]["message"]["content"].strip()
+
+

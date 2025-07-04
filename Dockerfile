@@ -1,5 +1,5 @@
 # Use a minimal Python image
-FROM python:3.13.2-slim
+FROM python:3.10.12-slim
 
 # Set the working directory
 WORKDIR /usr/src/pki-expert
@@ -23,4 +23,4 @@ EXPOSE 7860
 ENV GRADIO_SERVER_NAME=0.0.0.0
 
 # Run the app
-CMD ["python", "src/main.py"]
+CMD ["python", "src/app.py"]
