@@ -15,6 +15,18 @@ User Question:
 Context:
 {}"""
 
+# prompt_template = """You are a helpful and knowledgeable assistant who is expert in cybersecurity. Please answer the user's question based on the context provided below. Sometimes, usser'questions is about performing a task based on additional information he uploaded.Answer in a clear, concise, and informative manner. If the answer is not present in the context, respond with: "I could not find the answer based on the context you provided."
+    
+# User Question:
+# {}
+    
+# Context about cybersecurity:
+# {}
+
+# Additional information uploaded by the user:
+# {}
+# """
+
 
 def context_retrieval(user_question: str, top_k: int = 3):
     """

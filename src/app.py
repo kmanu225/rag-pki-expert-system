@@ -5,7 +5,7 @@ import os
 import shutil
 
 
-def query_local_hgf_llm(user_question: str, history):
+def query_local_hgf_llm(history):
     """
     Processes a user question by retrieving relevant context and generating a response.
 
