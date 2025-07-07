@@ -79,6 +79,7 @@ sudo apt update
 ```bash
 cd db
 docker-compose up --build
+cd ..
 ```
 
 ### 3. Set Environment Variables
@@ -106,4 +107,3 @@ pip install -r requirements.txt
 ```bash
 python3 src/app.py
 ```
-
