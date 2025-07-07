@@ -1,55 +1,109 @@
 # 🔐 PKI Expert System with RAG
 
-## Goals
+## 🎯 Goals
 
-Build a Public Key Infrastructure (PKI) expert system using a text-based knowledge base and Retrieval-Augmented Generation (RAG) for context-aware responses.
+Develop an expert system for **Public Key Infrastructure (PKI)** using a **text-based knowledge base** and **Retrieval-Augmented Generation (RAG)** to provide accurate, context-aware responses.
 
+---
 
-## Features
+## ✨ Features
 
-* **Retrieval-Augmented Generation (RAG)**
-  Combines vector search (via ChromaDB) with text generation (using free models from Hugging Face/openrouter).
+* **🔍 Retrieval-Augmented Generation (RAG)**
+  Leverages vector search via **ChromaDB** and text generation using open models from **Hugging Face** or **OpenRouter**.
 
-* **Automated Knowledge Processing**
-  Automatically chunks and indexes documents from the local `knowledge/` folder for efficient retrieval.
+* **📚 Automated Knowledge Processing**
+  Automatically chunks and indexes documents from the `knowledge/` folder for efficient and fast retrieval.
 
-* **Interactive Dialog Interface**
-  Provides a command-line and Gradio-based assistant that retrieves relevant context and generates informed answers.
+* **💬 Interactive Dialog Interface**
+  Supports both **command-line** and **Gradio-based** user interfaces for interactive expert consultation.
 
-* **Modular Architecture**
-  Easily extend or replace components such as the LLM, vector database, or prompting logic.
+* **🧩 Modular Architecture**
+  Components like the LLM, vector store, and prompt logic are modular and easily replaceable.
 
+---
 
-## Project Structure
+## 🗂️ Project Structure
 
-```text
+```plaintext
 .
-├── Dockerfile                 # Containerization instructions
-├── LICENSE                    # Project license
-├── README.md                  # Project documentation (this file)
+├── Dockerfile                     # Docker container setup
+├── LICENSE                        # License file
+├── README.md                      # Project documentation
 ├── db/
-│   └── chroma_db              # ChromaDB vector database files
+│   ├── chroma_db/                 # ChromaDB local vector database files
+│   ├── docker-compose.yml         # Docker configuration for ChromaDB
+│   └── otel-collector-config.yaml # OpenTelemetry collector config (if used for observability)
 ├── docs/
-│   └── architecture.png       # System architecture diagram
-├── requirements.txt           # Python dependencies
+│   └── architecture.png           # System architecture diagram
+├── requirements.txt               # Python dependencies
 ├── src/
-    ├── app.py                 # Main application entry point
-    ├── embedding_storage.py   # Embedding storage and retrieval logic
-    ├── knowledge/             # Folder for source documents (e.g., .txt files)
-    ├── llm_pipeline.py        # Language model pipeline and integration
-    ├── rag.py                 # RAG (Retrieval-Augmented Generation) core implementation
-    └── test.py                # Test scripts and utilities
+│   ├── __pycache__/               # Python cache files (can be ignored)
+│   ├── app.py                     # Main application entry point
+│   ├── embedding_storage.py       # Embedding storage & retrieval logic
+│   ├── media_to_text.py           # (Optional) Convert media (audio/video) to text for indexing
+│   ├── rag.py                     # Core RAG implementation
+│   └── knowledge/                 # Directory for source documents (.txt, .pdf, etc.)
+└── test/
+    ├── demo.ipynb                 # Jupyter notebook for testing & exploration
+    └── uploads/                   # Folder for uploaded files (used in demos/tests)
 
 ```
 
-## Architecture
+---
 
-![alt text](docs/architecture.png)
+## 🧱 System Architecture
 
+![System Architecture](docs/architecture.png)
 
-## Prerequesites
+---
 
-- Python 3.10.12+
-- openrouter api key
-- huggingface api key
-- docker 
+## ⚙️ Prerequisites
+
+* Python **3.10.12+**
+* [OpenRouter](https://openrouter.ai/) API key
+* [Hugging Face](https://huggingface.co/) API token
+* Docker
+
+---
+
+## 🚀 Getting Started
+
+### 1. Update Your System
+
+```bash
+sudo apt update
+```
+
+### 2. Build and Run the Docker Vector Database
+
+```bash
+cd db
+docker-compose up --build
+```
+
+### 3. Set Environment Variables
+
+```bash
+export OPENROUTER_API_KEY=your_openrouter_api_key
+export HF_TOKEN=your_huggingface_token
+```
+
+### 4. Create and Activate a Virtual Environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 5. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 6. Run the app
+
+```bash
+python3 src/app.py
+```
+
